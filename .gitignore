@@ -1,0 +1,20 @@
+# Virtual env
+restaurant-analytics-env/
+venv/
+.env
+*.pyc
+__pycache__/
+
+# Terraform build files
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Raw data
+*.csv
+*.parquet
+*.zip
+*.log
+
+# Jupyter checkpoints
+*.ipynb_checkpoints/
