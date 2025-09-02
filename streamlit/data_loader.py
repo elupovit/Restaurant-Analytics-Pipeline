@@ -1,13 +1,24 @@
 import pandas as pd
+import os
+import streamlit as st
 
 # Base path to your Gold layer
 GOLD_PATH = "s3://restaurant-analytics-data/gold/"
 
-# AWS creds are pulled automatically from env vars
-STORAGE_OPTS = {
-    "anon": False,
-    "client_kwargs": {"region_name": "us-east-1"}
-}
+# Decide how to authenticate with S3
+if "AWS_ACCESS_KEY_ID" in st.secrets:
+    # Streamlit Cloud → use secrets.toml
+    STORAGE_OPTS = {
+        "key": st.secrets["AWS_ACCESS_KEY_ID"],
+        "secret": st.secrets["AWS_SECRET_ACCESS_KEY"],
+        "client_kwargs": {"region_name": st.secrets["AWS_DEFAULT_REGION"]},
+    }
+else:
+    # Local run → use AWS CLI creds or ~/.aws/credentials
+    STORAGE_OPTS = {
+        "anon": False,
+        "client_kwargs": {"region_name": "us-east-1"}
+    }
 
 def _safe_cast(df, numeric_cols):
     """Ensure numeric columns are cast properly, fill NaNs with 0."""
